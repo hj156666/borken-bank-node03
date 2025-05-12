@@ -1,4 +1,42 @@
-// Klassendefinition des Kunden
+npm install sqlite3const sqlite3 = require('sqlite3').verbose();
+
+// Verbindung zur SQLite-Datenbank herstellen (oder erstellen, falls sie nicht existiert)
+const db = new sqlite3.Database('./borken-bank.db', (err) => {
+    if (err) {
+        console.error('Fehler beim Verbinden mit der Datenbank:', err.message);
+    } else {
+        console.log('Verbindung zur SQLite-Datenbank hergestellt.');
+    }
+});
+
+// Beispiel: Tabelle erstellen
+db.serialize(() => {
+    db.run(`
+        CREATE TABLE IF NOT EXISTS kunden (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nachname TEXT NOT NULL,
+            vorname TEXT NOT NULL,
+            benutzername TEXT UNIQUE NOT NULL,
+            kennwort TEXT NOT NULL,
+            istEingeloggt BOOLEAN DEFAULT 0
+        )
+    `, (err) => {
+        if (err) {
+            console.error('Fehler beim Erstellen der Tabelle:', err.message);
+        } else {
+            console.log('Tabelle "kunden" erfolgreich erstellt oder existiert bereits.');
+        }
+    });
+});
+
+// Verbindung schließen (optional, wenn nicht mehr benötigt)
+db.close((err) => {
+    if (err) {
+        console.error('Fehler beim Schließen der Datenbank:', err.message);
+    } else {
+        console.log('Datenbankverbindung geschlossen.');
+    }
+});require('./database');node server.js// Klassendefinition des Kunden
 class Kunde{
 	constructor(){
 		this.Nachname
